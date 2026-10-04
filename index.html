@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    h1 { font-size: 2rem; margin-bottom: 10px; }
+    p { color: #a0a0c0; margin-bottom: 30px; }
+
+    /* Chest styling */
+    .chest-box {
+      font-size: 120px;
+      cursor: pointer;
+      transition: transform 0.2s, filter 0.2s;
+      user-select: none;
+    }
+
+    .chest-box:hover {
+      transform: scale(1.1);
+      filter: drop-shadow(0 0 15px #ffd700);
+    }
+
+    /* Card styling */
+    .card-container {
+      display: none;
+      margin-top: 10px;
+      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .card-container img {
+      max-width: 90vw;
+      width: 420px;
+      border-radius: 16px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+      border: 3px solid #ffd700;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.5) translateY(30px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+  </style>
+  <!-- Confetti script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <div id="chest-section">
+    <h1>🎁 Special Delivery for Delhi!</h1>
+    <p>Click the chest to open your Birthday Rating Card</p>
+    <div class="chest-box" id="chest" onclick="openChest()">🧰</div>
+  </div>
+
+  <div class="card-container" id="ratingCard">
+    <h2>🎉 Official Brother Evaluation 🎉</h2>
+    <!-- Make sure your uploaded image matches this filename -->
+    <img src="rating-card.png" alt="Brother Rating Card">
+  </div>
+
+  <script>
+    function openChest() {
+      const chest = document.getElementById('chest');
+      const card = document.getElementById('ratingCard');
+      const chestSection = document.getElementById('chest-section');
+
+      // Change graphic to unlocked
+      chest.innerHTML = '🔓';
+
+      // Fire confetti burst
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+
+      // Hide chest & display rating card
+      setTimeout(() => {
+        chestSection.style.display = 'none';
+        card.style.display = 'block';
+      }, 500);
+    }
+  </script>
+</body>
+</html>
