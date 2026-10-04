@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Happy Birthday!</title>
+  <title>Special Delivery!</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
       color: white;
       display: flex;
       flex-direction: column;
@@ -18,41 +18,100 @@
       padding: 20px;
       box-sizing: border-box;
       text-align: center;
+      overflow-x: hidden;
     }
 
-    h1 { font-size: 2rem; margin-bottom: 10px; }
-    p { color: #a0a0c0; margin-bottom: 30px; }
+    /* Title & Flying Cake */
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-    /* Chest styling */
-    .chest-box {
-      font-size: 120px;
+    .flying-cake {
+      display: inline-block;
+      font-size: 2.6rem;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(10deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      color: #ffdd59;
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Chest Styling & Animation */
+    .chest-container {
       cursor: pointer;
-      transition: transform 0.2s, filter 0.2s;
       user-select: none;
+      margin: 20px 0;
+      display: inline-block;
+      transition: transform 0.2s ease;
     }
 
-    .chest-box:hover {
+    .chest-container:hover {
       transform: scale(1.1);
-      filter: drop-shadow(0 0 15px #ffd700);
     }
 
-    /* Card styling */
+    .chest-icon {
+      font-size: 120px;
+      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 28px rgba(255, 215, 0, 0.8)); }
+      100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
+    }
+
+    .shake {
+      animation: shake 0.5s ease-in-out !important;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-10px) rotate(-5deg); }
+      40% { transform: translateX(10px) rotate(5deg); }
+      60% { transform: translateX(-10px) rotate(-5deg); }
+      80% { transform: translateX(10px) rotate(5deg); }
+    }
+
+    /* Rating Card Reveal */
     .card-container {
       display: none;
       margin-top: 10px;
       animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
+    .card-container h2 {
+      color: #ffd700;
+      margin-bottom: 15px;
+    }
+
     .card-container img {
       max-width: 90vw;
-      width: 420px;
+      width: 440px;
       border-radius: 16px;
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
       border: 3px solid #ffd700;
     }
 
     @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.5) translateY(30px); }
+      0% { opacity: 0; transform: scale(0.4) translateY(40px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
   </style>
@@ -62,39 +121,60 @@
 <body>
 
   <div id="chest-section">
-    <h1>🎁 Special Delivery for Delhi!</h1>
-    <p>Click the chest to open your Birthday Rating Card</p>
-    <div class="chest-box" id="chest" onclick="openChest()">🧰</div>
+    <h1>Special Delivery to Birthday Boy <span class="flying-cake">🎂</span></h1>
+    <p class="subtitle">Tap to unlock chest</p>
+    <div class="chest-container" id="chestContainer" onclick="openChest()">
+      <div class="chest-icon" id="chest">🧰</div>
+    </div>
   </div>
 
   <div class="card-container" id="ratingCard">
     <h2>🎉 Official Brother Evaluation 🎉</h2>
-    <!-- Make sure your uploaded image matches this filename -->
     <img src="rating-card.png" alt="Brother Rating Card">
   </div>
 
   <script>
     function openChest() {
       const chest = document.getElementById('chest');
+      const chestContainer = document.getElementById('chestContainer');
       const card = document.getElementById('ratingCard');
       const chestSection = document.getElementById('chest-section');
 
-      // Change graphic to unlocked
-      chest.innerHTML = '🔓';
+      // Add shake animation when clicked
+      chestContainer.classList.add('shake');
 
-      // Fire confetti burst
+      // First confetti burst
       confetti({
         particleCount: 120,
         spread: 80,
         origin: { y: 0.6 }
       });
 
-      // Hide chest & display rating card
+      // Change icon to unlocked
+      setTimeout(() => {
+        chest.innerHTML = '🔓';
+      }, 300);
+
+      // Hide chest & pop out the card with side confetti
       setTimeout(() => {
         chestSection.style.display = 'none';
         card.style.display = 'block';
-      }, 500);
+        
+        confetti({
+          particleCount: 80,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 80,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+      }, 750);
     }
   </script>
 </body>
 </html>
+
