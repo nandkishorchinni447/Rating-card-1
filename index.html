@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at center, #2a085c 0%, #0d0118 100%);
+      background: radial-gradient(circle at center, #1e053d 0%, #080010 100%);
       color: white;
       display: flex;
       flex-direction: column;
@@ -30,7 +30,7 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
     }
 
     .flying-cake {
@@ -52,10 +52,11 @@
       margin-bottom: 30px;
       font-weight: 600;
       letter-spacing: 0.8px;
-      text-shadow: 0 0 8px rgba(255, 183, 197, 0.6);
+      text-shadow: 0 0 10px rgba(255, 183, 197, 0.7);
+      transition: all 0.5s ease;
     }
 
-    /* Castle Crush Epic Chest Glow & Container */
+    /* Chest Section & Slow Opening Animation */
     .chest-container {
       cursor: pointer;
       user-select: none;
@@ -70,7 +71,7 @@
       height: auto;
       filter: drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 45px #d800ff);
       animation: epicGlow 2.2s infinite alternate ease-in-out;
-      transition: transform 0.2s ease;
+      transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .chest-container:hover .epic-chest-img {
@@ -78,55 +79,113 @@
       filter: drop-shadow(0 0 35px #ffe600) drop-shadow(0 0 65px #f355ff);
     }
 
-    /* Pulsing Epic Aura */
     @keyframes epicGlow {
-      0% {
-        transform: scale(1);
-        filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 40px #b100e8);
-      }
-      100% {
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 38px #ffee55) drop-shadow(0 0 70px #ff66fc);
-      }
+      0% { transform: scale(1); filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 40px #b100e8); }
+      100% { transform: scale(1.05); filter: drop-shadow(0 0 38px #ffee55) drop-shadow(0 0 70px #ff66fc); }
     }
 
-    /* Shake on Tap */
-    .shake {
-      animation: shake 0.5s ease-in-out !important;
+    /* Slow Open Effect */
+    .opening-chest {
+      transform: scale(1.35) translateY(-20px) !important;
+      filter: drop-shadow(0 0 60px #ffffff) drop-shadow(0 0 100px #00d4ff) !important;
+      opacity: 0;
     }
 
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-12px) rotate(-6deg); }
-      40% { transform: translateX(12px) rotate(6deg); }
-      60% { transform: translateX(-12px) rotate(-6deg); }
-      80% { transform: translateX(12px) rotate(6deg); }
-    }
-
-    /* Rating Card Reveal */
-    .card-container {
+    /* 3D Card Scene */
+    .card-scene {
+      perspective: 1200px;
       display: none;
       margin-top: 10px;
-      animation: popIn 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    .card-container h2 {
-      color: #ffd700;
-      margin-bottom: 15px;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    .card-flipper {
+      width: 310px;
+      height: 460px;
+      max-width: 85vw;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      animation: riseUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
-    .card-container img {
-      max-width: 90vw;
-      width: 440px;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(216, 0, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.9);
-      border: 3px solid #ffd700;
+    .card-flipper.flipped {
+      transform: rotateY(180deg);
     }
 
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.3) translateY(50px); }
+    @keyframes riseUp {
+      0% { opacity: 0; transform: scale(0.3) translateY(100px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* Dark Blue Thunder Back Face */
+    .card-back {
+      background: radial-gradient(circle, #091e42 0%, #020c1b 100%);
+      border: 3px solid #00d4ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: thunderGlow 1.2s infinite alternate ease-in-out;
+    }
+
+    .thunder-icon {
+      font-size: 70px;
+      margin-bottom: 15px;
+      animation: thunderPulse 0.4s infinite alternate;
+      text-shadow: 0 0 20px #00d4ff, 0 0 40px #0055ff;
+    }
+
+    .card-back-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #79e2ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px #00d4ff;
+    }
+
+    /* Thunder Electric Effect */
+    @keyframes thunderGlow {
+      0% {
+        box-shadow: 0 0 20px #00d4ff, 0 0 40px #0055ff, inset 0 0 15px #00d4ff;
+      }
+      50% {
+        box-shadow: 0 0 35px #00e1ff, 0 0 70px #0022ff, 0 0 90px #00d4ff, inset 0 0 25px #00ffff;
+      }
+      100% {
+        box-shadow: 0 0 15px #0077ff, 0 0 30px #001199, inset 0 0 10px #0077ff;
+      }
+    }
+
+    @keyframes thunderPulse {
+      0% { opacity: 0.8; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Card Front (The Rating Card) */
+    .card-front {
+      transform: rotateY(180deg);
+      border: 3px solid #ffd700;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 15px 35px rgba(0, 0, 0, 0.9);
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 17px;
     }
   </style>
   <!-- Confetti script -->
@@ -136,62 +195,96 @@
 
   <div id="chest-section">
     <h1>Special Delivery to Birthday Boy <span class="flying-cake">🎂</span></h1>
-    <p class="subtitle">Tap to unlock chest</p>
+    <p class="subtitle" id="subtitleText">Tap to unlock chest</p>
+
     <div class="chest-container" id="chestContainer" onclick="openChest()">
       <img src="epic-chest.png" alt="Castle Crush Epic Chest" class="epic-chest-img" id="chestImg">
     </div>
   </div>
 
-  <div class="card-container" id="ratingCard">
-    <h2>🎉 Official Brother Evaluation 🎉</h2>
-    <img src="rating-card.png" alt="Brother Rating Card">
+  <!-- 3D Flippable Card -->
+  <div class="card-scene" id="cardScene">
+    <div class="card-flipper" id="cardFlipper" onclick="revealCard()">
+      <!-- Back Side (Thunder Theme) -->
+      <div class="card-face card-back">
+        <div class="thunder-icon">⚡</div>
+        <div class="card-back-title">Epic Rating</div>
+      </div>
+
+      <!-- Front Side (Rating Card Image) -->
+      <div class="card-face card-front">
+        <img src="rating-card.png" alt="Brother Rating Card">
+      </div>
+    </div>
   </div>
 
   <script>
+    let chestOpened = false;
+    let cardRevealed = false;
+
     function openChest() {
+      if (chestOpened) return;
+      chestOpened = true;
+
       const chestImg = document.getElementById('chestImg');
-      const chestContainer = document.getElementById('chestContainer');
-      const card = document.getElementById('ratingCard');
       const chestSection = document.getElementById('chest-section');
+      const cardScene = document.getElementById('cardScene');
+      const subtitleText = document.getElementById('subtitleText');
 
-      // Trigger shake animation
-      chestContainer.classList.add('shake');
+      // 1. Slow Opening Animation with intense glow
+      chestImg.classList.add('opening-chest');
 
-      // Gold & Pink Confetti Burst
+      // 2. Initial Thunder/Energy Confetti Burst
       confetti({
-        particleCount: 140,
-        spread: 90,
+        particleCount: 100,
+        spread: 100,
         origin: { y: 0.6 },
-        colors: ['#ffd700', '#ff66fc', '#ffffff', '#e056fd']
+        colors: ['#00d4ff', '#0055ff', '#ffd700', '#ffffff']
       });
 
-      // Scale up and fade during unlock
+      // 3. After slow open, hide chest and show card back with thunder aura
       setTimeout(() => {
-        chestImg.style.transform = 'scale(1.2)';
-        chestImg.style.opacity = '0.5';
-      }, 300);
+        chestImg.style.display = 'none';
+        subtitleText.innerText = "⚡ Tap the card to reveal! ⚡";
+        subtitleText.style.color = "#00d4ff";
+        subtitleText.style.textShadow = "0 0 12px #00d4ff";
+        cardScene.style.display = "block";
+      }, 1000);
+    }
 
-      // Hide chest & reveal rating card
-      setTimeout(() => {
-        chestSection.style.display = 'none';
-        card.style.display = 'block';
+    function revealCard() {
+      if (cardRevealed) return;
+      cardRevealed = true;
+
+      const cardFlipper = document.getElementById('cardFlipper');
+      const subtitleText = document.getElementById('subtitleText');
+
+      // 1. Flip Card 3D
+      cardFlipper.classList.add('flipped');
+      subtitleText.innerText = "🎉 Official Brother Evaluation 🎉";
+      subtitleText.style.color = "#ffd700";
+      subtitleText.style.textShadow = "0 0 12px #ffd700";
+
+      // 2. Big Sprinkle & Confetti Explosion
+      const duration = 2.5 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
 
         confetti({
-          particleCount: 90,
-          angle: 60,
-          spread: 60,
-          origin: { x: 0 },
-          colors: ['#ffd700', '#d800ff']
+          particleCount: 40,
+          startVelocity: 30,
+          spread: 360,
+          origin: { x: Math.random(), y: Math.random() - 0.2 },
+          colors: ['#ffd700', '#ff007f', '#00d4ff', '#ffffff', '#a855f7', '#ff9f43']
         });
-        confetti({
-          particleCount: 90,
-          angle: 120,
-          spread: 60,
-          origin: { x: 1 },
-          colors: ['#ffd700', '#d800ff']
-        });
-      }, 750);
+      }, 200);
     }
   </script>
 </body>
 </html>
+
