@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      background: radial-gradient(circle at center, #2a085c 0%, #0d0118 100%);
       color: white;
       display: flex;
       flex-direction: column;
@@ -30,6 +30,7 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
     }
 
     .flying-cake {
@@ -46,72 +47,85 @@
 
     /* Subtitle */
     .subtitle {
-      color: #ffdd59;
+      color: #ffb7c5;
       font-size: 1.3rem;
       margin-bottom: 30px;
       font-weight: 600;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
+      text-shadow: 0 0 8px rgba(255, 183, 197, 0.6);
     }
 
-    /* Chest Styling & Animation */
+    /* Castle Crush Epic Chest Glow & Container */
     .chest-container {
       cursor: pointer;
       user-select: none;
       margin: 20px 0;
       display: inline-block;
+      position: relative;
+    }
+
+    .epic-chest-img {
+      width: 280px;
+      max-width: 80vw;
+      height: auto;
+      filter: drop-shadow(0 0 25px #ffd700) drop-shadow(0 0 45px #d800ff);
+      animation: epicGlow 2.2s infinite alternate ease-in-out;
       transition: transform 0.2s ease;
     }
 
-    .chest-container:hover {
-      transform: scale(1.1);
+    .chest-container:hover .epic-chest-img {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 35px #ffe600) drop-shadow(0 0 65px #f355ff);
     }
 
-    .chest-icon {
-      font-size: 120px;
-      filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
-      animation: pulse 2s infinite;
+    /* Pulsing Epic Aura */
+    @keyframes epicGlow {
+      0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 20px #ffd700) drop-shadow(0 0 40px #b100e8);
+      }
+      100% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 38px #ffee55) drop-shadow(0 0 70px #ff66fc);
+      }
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
-      50% { transform: scale(1.05); filter: drop-shadow(0 0 28px rgba(255, 215, 0, 0.8)); }
-      100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4)); }
-    }
-
+    /* Shake on Tap */
     .shake {
       animation: shake 0.5s ease-in-out !important;
     }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-10px) rotate(-5deg); }
-      40% { transform: translateX(10px) rotate(5deg); }
-      60% { transform: translateX(-10px) rotate(-5deg); }
-      80% { transform: translateX(10px) rotate(5deg); }
+      20% { transform: translateX(-12px) rotate(-6deg); }
+      40% { transform: translateX(12px) rotate(6deg); }
+      60% { transform: translateX(-12px) rotate(-6deg); }
+      80% { transform: translateX(12px) rotate(6deg); }
     }
 
     /* Rating Card Reveal */
     .card-container {
       display: none;
       margin-top: 10px;
-      animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: popIn 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
 
     .card-container h2 {
       color: #ffd700;
       margin-bottom: 15px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
     }
 
     .card-container img {
       max-width: 90vw;
       width: 440px;
       border-radius: 16px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 30px rgba(216, 0, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.9);
       border: 3px solid #ffd700;
     }
 
     @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.4) translateY(40px); }
+      0% { opacity: 0; transform: scale(0.3) translateY(50px); }
       100% { opacity: 1; transform: scale(1) translateY(0); }
     }
   </style>
@@ -124,7 +138,7 @@
     <h1>Special Delivery to Birthday Boy <span class="flying-cake">🎂</span></h1>
     <p class="subtitle">Tap to unlock chest</p>
     <div class="chest-container" id="chestContainer" onclick="openChest()">
-      <div class="chest-icon" id="chest">🧰</div>
+      <img src="epic-chest.png" alt="Castle Crush Epic Chest" class="epic-chest-img" id="chestImg">
     </div>
   </div>
 
@@ -135,46 +149,49 @@
 
   <script>
     function openChest() {
-      const chest = document.getElementById('chest');
+      const chestImg = document.getElementById('chestImg');
       const chestContainer = document.getElementById('chestContainer');
       const card = document.getElementById('ratingCard');
       const chestSection = document.getElementById('chest-section');
 
-      // Add shake animation when clicked
+      // Trigger shake animation
       chestContainer.classList.add('shake');
 
-      // First confetti burst
+      // Gold & Pink Confetti Burst
       confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 }
+        particleCount: 140,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#ffd700', '#ff66fc', '#ffffff', '#e056fd']
       });
 
-      // Change icon to unlocked
+      // Scale up and fade during unlock
       setTimeout(() => {
-        chest.innerHTML = '🔓';
+        chestImg.style.transform = 'scale(1.2)';
+        chestImg.style.opacity = '0.5';
       }, 300);
 
-      // Hide chest & pop out the card with side confetti
+      // Hide chest & reveal rating card
       setTimeout(() => {
         chestSection.style.display = 'none';
         card.style.display = 'block';
-        
+
         confetti({
-          particleCount: 80,
+          particleCount: 90,
           angle: 60,
-          spread: 55,
-          origin: { x: 0 }
+          spread: 60,
+          origin: { x: 0 },
+          colors: ['#ffd700', '#d800ff']
         });
         confetti({
-          particleCount: 80,
+          particleCount: 90,
           angle: 120,
-          spread: 55,
-          origin: { x: 1 }
+          spread: 60,
+          origin: { x: 1 },
+          colors: ['#ffd700', '#d800ff']
         });
       }, 750);
     }
   </script>
 </body>
 </html>
-
